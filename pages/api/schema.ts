@@ -1,5 +1,5 @@
 import { Func } from 'nexus-prisma'
-import { makeSchema, objectType } from 'nexus'
+import { makeSchema, mutationType, objectType, queryType } from 'nexus'
 
 export const schema = makeSchema({
   types: [
@@ -11,6 +11,17 @@ export const schema = makeSchema({
         t.field(Func.name.name, Func.name)
         t.field(Func.contents.name, Func.contents)
       }
-    })
+    }),
+    queryType({
+      definition(t) {
+        t.field(Func.id.name, Func.id)
+      }
+    }),
+    mutationType({
+      definition(t) {
+        t.field(Func.name.name, Func.name)
+        t.field(Func.contents.name, Func.contents)
+      }
+    }),
   ]
 })
