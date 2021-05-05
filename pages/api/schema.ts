@@ -1,36 +1,38 @@
-import { objectType, queryType, makeSchema, stringArg, nonNull, idArg } from 'nexus'
+import { objectType, queryType, makeSchema, stringArg, nonNull, idArg, mutationType } from 'nexus'
+import { nexusPrisma } from 'nexus-plugin-prisma'
 import path from 'path'
-import prisma from "../prisma"
-
-const Func = objectType({
-  name: 'Func',
-  definition(t) {
-    t.nonNull.id('id')
-    t.nonNull.string('name')
-    t.nonNull.string('contents')
-  },
-})
-
-const FuncQuery = queryType({
-  definition(t) {
-    t.field('func', {
-      type: Func,
-      args: {
-        funcId: nonNull(idArg())
-      },
-      resolve: (_, args) => {
-        return prisma.func.findUnique({
-          where: { id: Number(args.funcId) }
-        })
-      }
-    })
-  }
-})
+import prisma from "./prisma"
 
 export const schema = makeSchema({
-  types: [Func, FuncQuery],
+  plugins: [
+    nexusPrisma({ experimentalCRUD: true })
+  ],
   outputs: {
     typegen: path.join(process.cwd(), 'pages/api/nexus-typegen.ts'),
     schema: path.join(process.cwd(), 'pages/api/schema.graphql'),
   },
+  // contextType: {
+  //   module: require.resolve('.prisma/client/index.d.ts'),
+  //   export: 'PrismaClient',
+  // },
+  sourceTypes: {
+    modules: [
+      {
+        module: '@prisma/client',
+        alias: 'prisma',
+      },
+    ],
+  },
+  types: [
+    // queryType({
+    //   definition(t) {
+    //     t.crud.func()
+    //   }
+    // }),
+    // mutationType({
+    //   definition(t) {
+    //     t.crud.createOneFunc()
+    //   }
+    // })
+  ],
 })
