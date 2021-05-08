@@ -1,16 +1,18 @@
 import { Func } from '@prisma/client';
-import axios from 'axios';
-import React, { useEffect, useMemo, useState } from 'react'
+import React, { useMemo } from 'react'
 import { useTable } from 'react-table'
-import useSWR from 'swr'
 
-async function getFuncs(): Promise<Func[]> {
-  return (await axios.get<Func[]>("/api/funcs")).data
-}
+// async function getFuncs(url): Promise<Func[]> {
+//   console.log("Get Funcs")
+//   return (await axios.get<Func[]>(url)).data
+// }
 
-export default function FuncCatalog() {
-  const { data: funcs, error } = useSWR('/api/funcs', getFuncs)
+// export async function getStaticProps() {
+//   const initialFuncs = await getFuncs("/api/funcs")
+//   return { props: { initialFuncs } }
+// }
 
+export default function FuncCatalog({ funcs }: { funcs: Func[] }) {
   const columns = useMemo(() => [
     {
       Header: "Func ID",
@@ -22,14 +24,7 @@ export default function FuncCatalog() {
     },
   ], []);
 
-  const data = useMemo(() => {
-    console.log(`Funcs: ${funcs}`)
-    if (funcs) {
-      return funcs
-    } else {
-      return []
-    }
-  }, [funcs])
+  const data = useMemo(() => funcs, [funcs])
 
   const {
     getTableProps,
@@ -38,9 +33,6 @@ export default function FuncCatalog() {
     rows,
     prepareRow,
   } = useTable({ columns, data })
-
-  if (error) return <div>failed to load</div>
-  if (!funcs) return <div>loading...</div>
 
   return <table {...getTableProps()}>
     <thead>
