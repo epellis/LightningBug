@@ -4,14 +4,16 @@ import Head from 'next/head'
 import useSWR from 'swr'
 import FuncCatalog from '../components/func-catalog'
 import FuncEditor from '../components/func-editor'
+import { getAllFuncs } from '../src/services/func'
 import styles from '../styles/Home.module.css'
 
 async function getFuncs(url): Promise<Func[]> {
+  console.log(`Getting url: ${url}`)
   return (await axios.get<Func[]>(url)).data
 }
 
 export async function getStaticProps() {
-  const initialFuncs = await getFuncs("/api/funcs")
+  const initialFuncs = await getAllFuncs({})
   return { props: { initialFuncs } }
 }
 
