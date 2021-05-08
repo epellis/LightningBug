@@ -28,7 +28,7 @@ export default function FuncEditor() {
   };
 
   return <div>
-    <h1>Func</h1>
+    <h2>{`Editing: ${name}`}</h2>
     <form onSubmit={handleSubmit}>
       <label>
         Name: <input type="text" value={name} onChange={handleNameChange} />

@@ -1,4 +1,5 @@
 import Head from 'next/head'
+import FuncCatalog from '../components/func-catalog'
 import FuncEditor from '../components/func-editor'
 import styles from '../styles/Home.module.css'
 
@@ -16,12 +17,8 @@ export default function Home() {
           Welcome to <a href="https://nextjs.org">Next.js!</a>
         </h1>
 
-        <FuncEditor></FuncEditor>
-
-        <p className={styles.description}>
-          Get started by editing{' '}
-          <code className={styles.code}>pages/index.js</code>
-        </p>
+        <FuncEditor />
+        <FuncCatalog />
 
       </main>
 
