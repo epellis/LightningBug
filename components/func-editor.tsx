@@ -1,6 +1,7 @@
 import { Func, Prisma } from '@prisma/client';
 import axios from 'axios';
 import React, { useState } from 'react';
+import { mutate } from 'swr';
 
 async function submit(name: string, contents: string): Promise<Func> {
   const data: Prisma.FuncCreateInput = {
@@ -23,8 +24,11 @@ export default function FuncEditor() {
   };
 
   const handleSubmit = (event) => {
-    submit(name, contents).then(func => console.log(JSON.stringify(func)))
+    submit(name, contents)
     event.preventDefault();
+    setName("");
+    setContents("");
+    mutate("/api/funcs")
   };
 
   return <div>

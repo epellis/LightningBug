@@ -18,7 +18,7 @@ export async function getStaticProps() {
 }
 
 export default function Home({ initialFuncs }: { initialFuncs: Func[] }) {
-  const { data: funcs } = useSWR('/api/posts', getFuncs, { initialData: initialFuncs })
+  const { data: funcs } = useSWR('/api/funcs', getFuncs, { initialData: initialFuncs })
 
   return (
     <div className={styles.container}>
@@ -30,7 +30,7 @@ export default function Home({ initialFuncs }: { initialFuncs: Func[] }) {
 
       <main className={styles.main}>
         <h1 className={styles.title}>
-          Welcome to <a href="https://nextjs.org">Next.js!</a>
+          Welcome to Lightning Bug
         </h1>
 
         <FuncEditor />
