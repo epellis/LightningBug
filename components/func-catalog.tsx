@@ -22,13 +22,22 @@ export default function FuncCatalog() {
     },
   ], []);
 
+  const data = useMemo(() => {
+    console.log(`Funcs: ${funcs}`)
+    if (funcs) {
+      return funcs
+    } else {
+      return []
+    }
+  }, [funcs])
+
   const {
     getTableProps,
     getTableBodyProps,
     headerGroups,
     rows,
     prepareRow,
-  } = useTable({ columns, funcs })
+  } = useTable({ columns, data })
 
   if (error) return <div>failed to load</div>
   if (!funcs) return <div>loading...</div>
