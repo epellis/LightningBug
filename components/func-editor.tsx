@@ -24,11 +24,10 @@ export default function FuncEditor() {
   };
 
   const handleSubmit = (event) => {
-    submit(name, contents)
+    submit(name, contents).then(() => { mutate("/api/funcs") })
     event.preventDefault();
     setName("");
     setContents("");
-    mutate("/api/funcs")
   };
 
   return <div>
