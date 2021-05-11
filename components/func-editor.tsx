@@ -3,6 +3,8 @@ import axios from 'axios';
 import React, { useState } from 'react';
 import { mutate } from 'swr';
 import Editor, { OnChange } from "@monaco-editor/react";
+import FuncCompileResults from './func-compile-results';
+import { CompileFuncResponse } from '../src/services/func';
 
 async function submit(name: string, contents: string): Promise<Func> {
   const data: Prisma.FuncCreateInput = {
@@ -12,9 +14,16 @@ async function submit(name: string, contents: string): Promise<Func> {
   return (await axios.post<Func>("/api/funcs", data)).data
 }
 
+async function compile(contents: string): Promise<CompileFuncResponse> {
+  return (await axios.post<CompileFuncResponse>("/api/funcs/compile", {
+    contents
+  })).data;
+}
+
 export default function FuncEditor() {
   const [name, setName] = useState("");
   const [contents, setContents] = useState("");
+  const [compileResults, setCompileResults] = useState<CompileFuncResponse>(null)
 
   const handleNameChange = (event) => {
     setName(event.target.value)
@@ -22,6 +31,7 @@ export default function FuncEditor() {
 
   const handleEditorChange: OnChange = (contents, event) => {
     setContents(contents);
+    compile(contents).then((res) => setCompileResults(res))
   }
 
   const handleSubmit = (event) => {
@@ -47,6 +57,6 @@ export default function FuncEditor() {
       </label>
       <input type="submit" value="Submit" />
     </form>
-    {/* <FuncCompilerError compilerError={compilerError} /> */}
+    <FuncCompileResults results={compileResults} />
   </div >
 }
