@@ -22,7 +22,7 @@ export default function FuncEditor() {
 
   const handleEditorChange: OnChange = (contents, event) => {
     setContents(contents);
-  };
+  }
 
   const handleSubmit = (event) => {
     submit(name, contents).then(() => { mutate("/api/funcs") })
@@ -35,7 +35,7 @@ export default function FuncEditor() {
     <h2>{`Editing: ${name}`}</h2>
     <div>
       <Editor
-        height="30vh"
+        height="50vh"
         defaultLanguage="typescript"
         defaultValue="// write your function here!"
         onChange={handleEditorChange}
@@ -47,5 +47,6 @@ export default function FuncEditor() {
       </label>
       <input type="submit" value="Submit" />
     </form>
+    {/* <FuncCompilerError compilerError={compilerError} /> */}
   </div >
 }
