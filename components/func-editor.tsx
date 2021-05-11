@@ -5,6 +5,7 @@ import { mutate } from 'swr';
 import Editor, { OnChange } from "@monaco-editor/react";
 import FuncCompileResults from './func-compile-results';
 import { CompileFuncResponse } from '../src/services/func';
+import { compileSource } from '../src/runtime/compiler';
 
 async function submit(name: string, contents: string): Promise<Func> {
   const data: Prisma.FuncCreateInput = {
@@ -12,12 +13,6 @@ async function submit(name: string, contents: string): Promise<Func> {
     contents: contents
   };
   return (await axios.post<Func>("/api/funcs", data)).data
-}
-
-async function compile(contents: string): Promise<CompileFuncResponse> {
-  return (await axios.post<CompileFuncResponse>("/api/funcs/compile", {
-    contents
-  })).data;
 }
 
 export default function FuncEditor() {
@@ -31,7 +26,8 @@ export default function FuncEditor() {
 
   const handleEditorChange: OnChange = (contents, event) => {
     setContents(contents);
-    compile(contents).then((res) => setCompileResults(res))
+    const compileSourceResults = compileSource(contents);
+    setCompileResults(compileSourceResults);
   }
 
   const handleSubmit = (event) => {
